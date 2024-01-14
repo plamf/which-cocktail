@@ -4,7 +4,7 @@ The App Contains over 600 drinks and almost 500 ingredients.
 
 Cocktail Data is static, Cocktail Images are fetched from the links provided by thecocktaildb.com. 
 
-Try it here: https://github.com/plamf/which-cocktail
+Try it here: http://plamf.github.io/which-cocktail
 
 ## Resources used
 Cocktail and Ingredient Data: https://www.thecocktaildb.com/
