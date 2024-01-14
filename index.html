@@ -1,0 +1,847 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Which Cocktail?</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Roboto&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        h1,
+        h2 {
+            font-family: 'Lobster', sans-serif;
+            text-align: center;
+            color: #F5F5DC;
+            text-shadow: 2px 2px 10px #ff9101;
+            padding: 10px;
+        }
+
+        h2 {
+            font-size: 3vh;
+            margin-bottom: 5vh;
+        }
+
+        body {
+            padding: 0;
+            margin: 0;
+            background: linear-gradient(135deg, #703307, #2a1994);
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            margin-top: 100px;
+            margin-left: 20px;
+            color: #ecf0f1;
+        }
+
+        .container {
+            max-width: 50vw;
+            margin: auto;
+            margin-bottom: 30px;
+        }
+
+        select[data-multi-select-plugin] {
+            display: none !important;
+        }
+
+        .multi-select-component {
+            position: relative;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            height: auto;
+            width: 100%;
+            padding: 3px 8px;
+            font-size: 14px;
+            line-height: 1.42857143;
+            padding-bottom: 0px;
+            color: #555;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+            -webkit-transition: border-color ease-in-out 0.15s, -webkit-box-shadow ease-in-out 0.15s;
+            -o-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+            transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+        }
+
+        .autocomplete-list {
+            border-radius: 4px 0px 0px 4px;
+        }
+
+        .multi-select-component:focus-within {
+            box-shadow: inset 0px 0px 0px 2px #78ABFE;
+        }
+
+        .multi-select-component .btn-group {
+            display: none !important;
+        }
+
+        .multiselect-native-select .multiselect-container {
+            width: 100%;
+        }
+
+        .selected-wrapper {
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            -webkit-border-radius: 3px;
+            -moz-border-radius: 3px;
+            border-radius: 3px;
+            display: inline-block;
+            border: 1px solid #d9d9d9;
+            background-color: #ededed;
+            white-space: nowrap;
+            margin: 1px 5px 5px 0;
+            height: 22px;
+            vertical-align: top;
+            cursor: default;
+        }
+
+        .selected-wrapper .selected-label {
+            max-width: 514px;
+            display: inline-block;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding-left: 4px;
+            vertical-align: top;
+        }
+
+        .selected-wrapper .selected-close {
+            display: inline-block;
+            text-decoration: none;
+            font-size: 14px;
+            line-height: 1.49em;
+            margin-left: 5px;
+            padding-bottom: 10px;
+            height: 100%;
+            vertical-align: top;
+            padding-right: 4px;
+            opacity: 0.2;
+            color: #000;
+            text-shadow: 0 1px 0 #fff;
+            font-weight: 700;
+        }
+
+        .search-container {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .search-container .selected-input {
+            background: none;
+            border: 0;
+            height: 20px;
+            width: 60px;
+            padding: 0;
+            margin-bottom: 6px;
+            -webkit-box-shadow: none;
+            box-shadow: none;
+        }
+
+        .search-container .selected-input:focus {
+            outline: none;
+        }
+
+        .dropdown-icon.active {
+            transform: rotateX(180deg)
+        }
+
+        .search-container .dropdown-icon {
+            display: inline-block;
+            padding: 10px 5px;
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 10px;
+            height: 10px;
+            border: 0 !important;
+            /* needed */
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            /* SVG background image */
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2012%2012%22%3E%3Ctitle%3Edown-arrow%3C%2Ftitle%3E%3Cg%20fill%3D%22%23818181%22%3E%3Cpath%20d%3D%22M10.293%2C3.293%2C6%2C7.586%2C1.707%2C3.293A1%2C1%2C0%2C0%2C0%2C.293%2C4.707l5%2C5a1%2C1%2C0%2C0%2C0%2C1.414%2C0l5-5a1%2C1%2C0%2C1%2C0-1.414-1.414Z%22%20fill%3D%22%23818181%22%3E%3C%2Fpath%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+            background-position: center;
+            background-size: 10px;
+            background-repeat: no-repeat;
+        }
+
+        .search-container ul {
+            position: absolute;
+            list-style: none;
+            padding: 0;
+            z-index: 3;
+            margin-top: 29px;
+            width: 100%;
+            right: 0px;
+            background: #fff;
+            border: 1px solid #ccc;
+            border-top: none;
+            border-bottom: none;
+            -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+        }
+
+        .search-container ul :focus {
+            outline: none;
+        }
+
+        .search-container ul li {
+            display: block;
+            text-align: left;
+            padding: 8px 29px 2px 12px;
+            border-bottom: 1px solid #ccc;
+            font-size: 14px;
+            min-height: 31px;
+        }
+
+        .search-container ul li:first-child {
+            border-top: 1px solid #ccc;
+            border-radius: 4px 0px 0 0;
+        }
+
+        .search-container ul li:last-child {
+            border-radius: 4px 0px 0 0;
+        }
+
+
+        .search-container ul li:hover.not-cursor {
+            cursor: default;
+        }
+
+        .search-container ul li:hover {
+            color: #333;
+            background-color: rgb(251, 242, 152);
+            ;
+            border-color: #adadad;
+            cursor: pointer;
+        }
+
+        .autocomplete-list {
+            max-height: 130px;
+            overflow-y: auto;
+        }
+
+        /* FLEX BOX*/
+        .flexible-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .cocktail-item {
+            position: relative;
+            max-width: 200px;
+        }
+
+        .cocktail-image {
+            width: 100%;
+            height: auto;
+        }
+
+        .cocktail-name-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            padding: 5px;
+            text-align: center;
+        }
+
+        /* OVERLAY */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(68, 67, 67, 0.7);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .overlay-content {
+            background: rgba(0, 0, 0, 0.7);
+            /* Transparent black background */
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            /* Center-align the content */
+            max-width: 500px;
+            width: 100%;
+            max-height: 500px;
+            overflow-y: auto;
+            position: relative;
+            /* Add relative positioning */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .overlay-content hr {
+            border: 1px solid #fff;
+            /* Add a border to make it visible */
+            width: 100%;
+            /* Full width */
+            margin: 10px 0;
+            /* Adjust the margin as needed */
+        }
+    </style>
+
+    <script>
+        let cocktails = [];
+
+        // Function to show the overlay with cocktail details
+        function showOverlay(cocktail) {
+            overlayContent.innerHTML = `
+                    <h1>${cocktail.name}</h1>
+                    <hr>
+                    <ul>
+                        ${cocktail.ingredients.map(ingredient => `<li>${Object.keys(ingredient)[0]}: ${Object.values(ingredient)[0]}</li>`).join('')}
+                    </ul>
+                    <hr>
+                    <p>${cocktail.recipe}</p>
+                `;
+            overlay.style.display = "flex";
+
+            // Close the overlay when clicking on it
+            overlay.onclick = function () {
+                overlay.style.display = 'none';
+            };
+        }
+
+        // Function to create a cocktail item in the flexible grid
+        function createCocktailItem(cocktail) {
+            const cocktailItem = document.createElement("div");
+            cocktailItem.classList.add("cocktail-item");
+
+            const cocktailImage = document.createElement("img");
+            cocktailImage.classList.add("cocktail-image");
+            cocktailImage.src = cocktail.image;
+            cocktailImage.alt = cocktail.name;
+
+            cocktailImage.addEventListener("click", () => {
+                showOverlay(cocktail);
+            });
+
+            const nameBar = document.createElement("div");
+            nameBar.classList.add("cocktail-name-bar");
+            nameBar.innerText = cocktail.name;
+
+            cocktailItem.appendChild(cocktailImage);
+            cocktailItem.appendChild(nameBar);
+            flexibleGrid.appendChild(cocktailItem);
+        }
+
+        // Function to show the overlay with cocktail details
+        function showOverlay(cocktail) {
+            overlayContent.innerHTML = `
+        <h1>${cocktail.name}</h1>
+        <hr>
+        <ul>
+            ${cocktail.ingredients.map(ingredient => `<li>${Object.keys(ingredient)[0]}: ${Object.values(ingredient)[0]}</li>`).join('')}
+        </ul>
+        <hr>
+        <p>${cocktail.recipe}</p>
+    `;
+            overlay.style.display = "flex";
+
+            // Close the overlay when clicking on it
+            overlay.onclick = function () {
+                overlay.style.display = 'none';
+            };
+        }
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            const select = document.querySelector("[data-multi-select-plugin]");
+            const flexibleGrid = document.getElementById("flexibleGrid");
+            const overlay = document.getElementById("overlay");
+            const overlayContent = document.getElementById("overlayContent");
+            const overlayClose = document.getElementById("overlayClose");
+
+            // Load Ingredients from JSON and append to the List
+            // Fetch JSON data for ingredients
+            await fetch('data/cocktail_ingredients.json')
+                .then(response => response.json())
+                .then(data => {
+                    // Clear existing options
+                    select.innerHTML = '';
+
+                    // Populate options from JSON
+                    data.forEach(value => {
+                        const option = document.createElement("option");
+                        option.value = value;
+                        option.innerText = value;
+                        select.appendChild(option);
+                    });
+
+                    // Initialize the multi-select component
+                    init(select);
+                })
+                .catch(error => console.error('Error fetching JSON:', error));
+
+            // Fetch JSON data for cocktails
+            await fetch('data/cocktail_recipes.json')
+                .then(response => response.json())
+                .then(data => {
+                    cocktails = data;
+                    // Create flexible grid for cocktails
+                    data.forEach(cocktail => {
+                        createCocktailItem(cocktail);
+                    });
+                })
+                .catch(error => console.error('Error fetching JSON:', error));
+
+        });
+
+        // Initialize function, create initial tokens with itens that are already selected by the user
+        function init(element) {
+            // Create div that wroaps all the elements inside (select, elements selected, search div) to put select inside
+            const wrapper = document.createElement("div");
+            wrapper.addEventListener("click", clickOnWrapper);
+            wrapper.classList.add("multi-select-component");
+
+            // Create elements of search
+            const search_div = document.createElement("div");
+            search_div.classList.add("search-container");
+            const input = document.createElement("input");
+            input.classList.add("selected-input");
+            input.setAttribute("autocomplete", "off");
+            input.setAttribute("tabindex", "0");
+            input.addEventListener("keyup", inputChange);
+            input.addEventListener("keydown", deletePressed);
+            input.addEventListener("click", openOptions);
+
+            const dropdown_icon = document.createElement("a");
+            dropdown_icon.setAttribute("href", "#");
+            dropdown_icon.classList.add("dropdown-icon");
+
+            dropdown_icon.addEventListener("click", clickDropdown);
+            const autocomplete_list = document.createElement("ul");
+            autocomplete_list.classList.add("autocomplete-list")
+            search_div.appendChild(input);
+            search_div.appendChild(autocomplete_list);
+            search_div.appendChild(dropdown_icon);
+
+            // set the wrapper as child (instead of the element)
+            element.parentNode.replaceChild(wrapper, element);
+            // set element as child of wrapper
+            wrapper.appendChild(element);
+            wrapper.appendChild(search_div);
+
+            createInitialTokens(element);
+            addPlaceholder(wrapper);
+        }
+
+        function removePlaceholder(wrapper) {
+            const input_search = wrapper.querySelector(".selected-input");
+            input_search.removeAttribute("placeholder");
+        }
+
+        function addPlaceholder(wrapper) {
+            const input_search = wrapper.querySelector(".selected-input");
+            const tokens = wrapper.querySelectorAll(".selected-wrapper");
+            if (!tokens.length && !(document.activeElement === input_search))
+                input_search.setAttribute("placeholder", "e.g. Gin");
+        }
+
+
+        // Function that create the initial set of tokens with the options selected by the users
+        function createInitialTokens(select) {
+            let {
+                options_selected
+            } = getOptions(select);
+            const wrapper = select.parentNode;
+            for (let i = 0; i < options_selected.length; i++) {
+                createToken(wrapper, options_selected[i]);
+            }
+        }
+
+        function updateGrid(filteredCocktails) {
+            const flexibleGrid = document.getElementById("flexibleGrid");
+            flexibleGrid.innerHTML = '';
+            filteredCocktails.forEach(cocktail => {
+                createCocktailItem(cocktail);
+            });
+        }
+
+        // Function to display all cocktails
+        function displayAllCocktails() {
+            const flexibleGrid = document.getElementById("flexibleGrid");
+            flexibleGrid.innerHTML = '';
+            cocktails.forEach(cocktail => {
+                createCocktailItem(cocktail);
+            });
+        }
+
+        function filterCocktails(selectedIngredients) {
+            const flexibleGrid = document.getElementById("flexibleGrid");
+
+            // Clear existing drinks in the grid
+            flexibleGrid.innerHTML = '';
+
+            // If no ingredients are selected, display all drinks
+            if (selectedIngredients.length === 0) {
+                displayAllCocktails();
+                return;
+            }
+
+            // Filter drinks based on selected ingredients
+            const filteredDrinks = cocktails.filter(cocktail => {
+                if (!cocktail.ingredients) {
+                    console.error("Ingredients are undefined for cocktail:", cocktail);
+                    return false; // Skip this cocktail
+                }
+
+                const cocktailIngredients = cocktail.ingredients.map(ingredientObj => Object.keys(ingredientObj)[0]);
+                return selectedIngredients.every(ingredient => cocktailIngredients.includes(ingredient));
+            });
+
+            // Display the filtered drinks
+            filteredDrinks.forEach(cocktail => {
+                createCocktailItem(cocktail);
+            });
+        }
+
+
+
+        // Listener of user search
+        function inputChange(e) {
+            const wrapper = e.target.parentNode.parentNode;
+            const select = wrapper.querySelector("select");
+            const dropdown = wrapper.querySelector(".dropdown-icon");
+
+            const input_val = e.target.value;
+
+            if (e.target.dataset.listItemClicked) {
+                // Clicked on a list item, trigger filtering
+                const selectedIngredients = Array.from(document.querySelectorAll(".selected-wrapper"))
+                    .map(token => token.querySelector(".selected-label").innerText);
+
+                // Call the function to filter cocktails based on selected ingredients
+                filterCocktails(selectedIngredients);
+            }
+
+            if (input_val) {
+                dropdown.classList.add("active");
+                populateAutocompleteList(select, input_val.trim());
+            } else {
+                dropdown.classList.remove("active");
+                const event = new Event('click');
+                dropdown.dispatchEvent(event);
+            }
+        }
+
+
+        // Listen for clicks on the wrapper, if click happens focus on the input
+        function clickOnWrapper(e) {
+            const wrapper = e.target;
+            if (wrapper.tagName == "DIV") {
+                const input_search = wrapper.querySelector(".selected-input");
+                const dropdown = wrapper.querySelector(".dropdown-icon");
+                if (!dropdown.classList.contains("active")) {
+                    const event = new Event('click');
+                    dropdown.dispatchEvent(event);
+                }
+                input_search.focus();
+                removePlaceholder(wrapper);
+            }
+
+        }
+
+        function openOptions(e) {
+            const input_search = e.target;
+            const wrapper = input_search.parentElement.parentElement;
+            const dropdown = wrapper.querySelector(".dropdown-icon");
+            if (!dropdown.classList.contains("active")) {
+                const event = new Event('click');
+                dropdown.dispatchEvent(event);
+            }
+            e.stopPropagation();
+
+        }
+
+        // Function that create a token inside of a wrapper with the given value
+        function createToken(wrapper, value) {
+            const search = wrapper.querySelector(".search-container");
+            // Create token wrapper
+            const token = document.createElement("div");
+            token.classList.add("selected-wrapper");
+            const token_span = document.createElement("span");
+            token_span.classList.add("selected-label");
+            token_span.innerText = value;
+            const close = document.createElement("a");
+            close.classList.add("selected-close");
+            close.setAttribute("tabindex", "-1");
+            close.setAttribute("data-option", value);
+            close.setAttribute("data-hits", 0);
+            close.setAttribute("href", "#");
+            close.innerText = "x";
+            close.addEventListener("click", removeToken)
+            token.appendChild(token_span);
+            token.appendChild(close);
+            wrapper.insertBefore(token, search);
+        }
+
+
+        // Listen for clicks in the dropdown option
+        function clickDropdown(e) {
+            const dropdown = e.target;
+            const wrapper = dropdown.parentNode.parentNode;
+            const input_search = wrapper.querySelector(".selected-input");
+            const select = wrapper.querySelector("select");
+            dropdown.classList.toggle("active");
+
+            if (dropdown.classList.contains("active")) {
+                removePlaceholder(wrapper);
+                input_search.focus();
+
+                if (!input_search.value) {
+                    populateAutocompleteList(select, "", true);
+                } else {
+                    populateAutocompleteList(select, input_search.value);
+
+                }
+            } else {
+                clearAutocompleteList(select);
+                addPlaceholder(wrapper);
+            }
+        }
+
+
+        // Clears the results of the autocomplete list
+        function clearAutocompleteList(select) {
+            const wrapper = select.parentNode;
+
+            const autocomplete_list = wrapper.querySelector(".autocomplete-list");
+            autocomplete_list.innerHTML = "";
+        }
+
+        // Populate the autocomplete list following a given query from the user
+        function populateAutocompleteList(select, query, dropdown = false) {
+            const { autocomplete_options } = getOptions(select);
+
+            let options_to_show;
+
+            if (dropdown) options_to_show = autocomplete_options;
+            else options_to_show = autocomplete(query, autocomplete_options);
+
+            const wrapper = select.parentNode;
+            const input_search = wrapper.querySelector(".search-container");
+            const autocomplete_list = wrapper.querySelector(".autocomplete-list");
+            autocomplete_list.innerHTML = "";
+
+            const lowerCaseQuery = query.toLowerCase();
+
+            options_to_show.forEach(option => {
+                const lowerCaseOption = option.toLowerCase();
+                if (lowerCaseOption.includes(lowerCaseQuery)) {
+                    const li = document.createElement("li");
+                    li.innerText = option;
+                    li.setAttribute('data-value', option);
+                    li.addEventListener("click", selectOption);
+                    li.style.fontFamily = 'Roboto';
+
+                    autocomplete_list.appendChild(li);
+                } else {
+                    console.log("Not Matched option:", option);
+                }
+            });
+
+            if (autocomplete_list.childElementCount === 0) {
+                const li = document.createElement("li");
+                li.classList.add("not-cursor");
+                li.innerText = "No options found";
+                autocomplete_list.appendChild(li);
+            }
+        }
+
+        // Listener to autocomplete results when clicked set the selected property in the select option 
+        function selectOption(e) {
+            const wrapper = e.target.parentNode.parentNode.parentNode;
+            const input_search = wrapper.querySelector(".selected-input");
+            const option = wrapper.querySelector(`select option[value="${e.target.dataset.value}"]`);
+
+            option.setAttribute("selected", "");
+            createToken(wrapper, e.target.dataset.value);
+            if (input_search.value) {
+                input_search.value = "";
+            }
+
+            // Get selected ingredients
+            const selectedIngredients = Array.from(document.querySelectorAll(".selected-wrapper"))
+                .map(token => token.querySelector(".selected-label").innerText);
+
+            // Call the function to filter drinks based on selected ingredients
+            filterCocktails(selectedIngredients);
+
+            input_search.focus();
+
+            e.target.remove();
+            const autocomplete_list = wrapper.querySelector(".autocomplete-list");
+
+            if (!autocomplete_list.children.length) {
+                const li = document.createElement("li");
+                li.classList.add("not-cursor");
+                li.innerText = "No options found";
+                autocomplete_list.appendChild(li);
+            }
+
+            // Remove the flag indicating that a list item has been clicked
+            input_search.dataset.listItemClicked = false;
+
+            e.stopPropagation();
+        }
+
+
+        // function that returns a list with the autcomplete list of matches
+        function autocomplete(query, options) {
+            // No query passed, just return entire list
+            if (!query) {
+                return options;
+            }
+            let options_return = [];
+
+            for (let i = 0; i < options.length; i++) {
+                const lowerCaseOption = options[i].toLowerCase();
+                if (lowerCaseOption.includes(query.toLowerCase())) {
+                    options_return.push(options[i]);
+                }
+            }
+            return options_return;
+        }
+
+        // Returns the options that are selected by the user and the ones that are not
+        function getOptions(select) {
+            // Select all the options available
+            const all_options = Array.from(
+                select.querySelectorAll("option")
+            ).map(el => el.value);
+
+            // Get the options that are selected from the user
+            const options_selected = Array.from(
+                select.querySelectorAll("option:checked")
+            ).map(el => el.value);
+
+            // Create an autocomplete options array with the options that are not selected by the user
+            const autocomplete_options = [];
+            all_options.forEach(option => {
+                if (!options_selected.includes(option)) {
+                    autocomplete_options.push(option);
+                }
+            });
+
+            autocomplete_options.sort();
+
+            return {
+                options_selected,
+                autocomplete_options
+            };
+
+        }
+
+        // Listener for when the user wants to remove a given token.
+        function removeToken(e) {
+            // Get the value to remove
+            const value_to_remove = e.target.dataset.option;
+            const wrapper = e.target.parentNode.parentNode;
+            const input_search = wrapper.querySelector(".selected-input");
+            const dropdown = wrapper.querySelector(".dropdown-icon");
+
+            // Get the options in the select to be unselected
+            const option_to_unselect = wrapper.querySelector(`select option[value="${value_to_remove}"]`);
+            option_to_unselect.removeAttribute("selected");
+
+            // Remove token attribute
+            e.target.parentNode.remove();
+
+            // Get selected ingredients
+            const selectedIngredients = Array.from(document.querySelectorAll(".selected-wrapper"))
+                .map(token => token.querySelector(".selected-label").innerText);
+
+            // Call the function to filter cocktails based on selected ingredients
+            filterCocktails(selectedIngredients);
+
+            input_search.focus();
+            dropdown.classList.remove("active");
+            const event = new Event('click');
+            dropdown.dispatchEvent(event);
+            e.stopPropagation();
+        }
+
+        // Listen for 2 sequence of hits on the delete key, if this happens delete the last token if exist
+        function deletePressed(e) {
+            const wrapper = e.target.parentNode.parentNode;
+            const input_search = e.target;
+            const key = e.keyCode || e.charCode;
+            const tokens = wrapper.querySelectorAll(".selected-wrapper");
+
+            if (tokens.length) {
+                const last_token_x = tokens[tokens.length - 1].querySelector("a");
+                let hits = +last_token_x.dataset.hits;
+
+                if (key == 8 || key == 46) {
+                    if (!input_search.value) {
+
+                        if (hits > 1) {
+                            // Trigger delete event
+                            const event = new Event('click');
+                            last_token_x.dispatchEvent(event);
+                        } else {
+                            last_token_x.dataset.hits = 2;
+                        }
+                    }
+                } else {
+                    last_token_x.dataset.hits = 0;
+                }
+            }
+            return true;
+        }
+
+        // You can call this function if you want to add new options to the select plugin
+        // Target needs to be a unique identifier from the select you want to append new option for example #multi-select-plugin
+        // Example of usage addOption("#multi-select-plugin", "tesla", "Tesla")
+        function addOption(target, val, text) {
+            const select = document.querySelector(target);
+            let opt = document.createElement('option');
+            opt.value = val;
+            opt.innerHTML = text;
+            select.appendChild(opt);
+        }
+
+    </script>
+</head>
+
+<body>
+    <h1>Which Cocktail?</h1>
+    <h2>Add the ingredients you have at home and find out!</h2>
+
+    <div class="container">
+        <select multiple data-multi-select-plugin>
+        </select>
+    </div>
+    </div>
+
+    <div id="flexibleGrid" class="flexible-grid">
+    </div>
+
+    <div id="overlay" class="overlay">
+        <div id="overlayContent" class="overlay-content"></div>
+    </div>
+</body>
+
+</html>
