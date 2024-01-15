@@ -857,40 +857,21 @@
             select.appendChild(opt);
         }
 
-        function displayCocktails(cocktails, selectedIngredients) {
+        function displayCocktails(cocktails) {
             const flexibleGrid = document.getElementById('flexibleGrid');
             flexibleGrid.innerHTML = ''; // Clear the existing content
 
             cocktails.forEach(cocktail => {
-                const cocktailItem = document.createElement('div');
-                cocktailItem.classList.add('cocktail-item');
-
-                const cocktailImage = document.createElement('img');
-                cocktailImage.src = cocktail.image; // Replace with your actual image property
-                cocktailImage.alt = cocktail.name; // Replace with your actual name property
-                cocktailImage.classList.add('cocktail-image');
-
-                const cocktailNameBar = document.createElement('div');
-                cocktailNameBar.classList.add('cocktail-name-bar');
-                cocktailNameBar.innerText = cocktail.name; // Replace with your actual name property
-
-                cocktailItem.appendChild(cocktailImage);
-                cocktailItem.appendChild(cocktailNameBar);
-
-                flexibleGrid.appendChild(cocktailItem);
+                createCocktailItem(cocktail);
             });
         }
 
         function filterCocktailsByLetter(letter) {
-            // Get selected ingredients
-            const selectedIngredients = Array.from(document.querySelectorAll(".selected-wrapper"))
-                .map(token => token.querySelector(".selected-label").innerText);
-
             // Filter cocktails that start with the selected letter
             const filteredCocktails = cocktails.filter(cocktail => cocktail.name.startsWith(letter));
 
             // Call the function to display filtered cocktails
-            displayCocktails(filteredCocktails, selectedIngredients);
+            displayCocktails(filteredCocktails);
         }
 
         function generateAlphabeticalIndex() {
