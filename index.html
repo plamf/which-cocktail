@@ -42,7 +42,14 @@
         }
 
         .container {
-            max-width: 50vw;
+            display: flex;
+            /* Set display to flex */
+            justify-content: center;
+            /* Center the content horizontally */
+            align-items: center;
+            /* Center the content vertically */
+            max-width: 75vw;
+            /* Increase the max-width to make it 50% larger */
             margin: auto;
             margin-bottom: 30px;
         }
@@ -58,6 +65,9 @@
             flex-wrap: wrap;
             height: auto;
             width: 100%;
+            /* Set width to 100% */
+            max-width: none;
+            /* Allow it to grow beyond max-width */
             padding: 3px 8px;
             font-size: 14px;
             line-height: 1.42857143;
@@ -254,7 +264,7 @@
             left: 0;
             width: 100%;
             background-color: rgba(0, 0, 0, 0.5);
-            color: #fff;
+            color: #F5F5DC;
             padding: 5px;
             text-align: center;
         }
@@ -299,6 +309,29 @@
             /* Full width */
             margin: 10px 0;
             /* Adjust the margin as needed */
+        }
+
+        /* Add styles for the alphabetical index */
+        .alphabetical-index {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-bottom: 10px;
+            /* Adjust as needed */
+        }
+
+        .alphabetical-index a {
+            margin: 0 5px;
+            text-decoration: none;
+            color: #F5F5DC;
+            /* Adjust color as needed */
+            font-weight: bold;
+        }
+
+        .alphabetical-index a:hover {
+            text-decoration: underline;
+            cursor: pointer;
         }
     </style>
 
@@ -372,6 +405,9 @@
             const overlay = document.getElementById("overlay");
             const overlayContent = document.getElementById("overlayContent");
             const overlayClose = document.getElementById("overlayClose");
+
+            // Call the function to generate the alphabetical index
+            generateAlphabeticalIndex();
 
             // Load Ingredients from JSON and append to the List
             // Fetch JSON data for ingredients
@@ -516,8 +552,6 @@
                 createCocktailItem(cocktail);
             });
         }
-
-
 
         // Listener of user search
         function inputChange(e) {
@@ -823,6 +857,73 @@
             select.appendChild(opt);
         }
 
+        function displayCocktails(cocktails, selectedIngredients) {
+            const flexibleGrid = document.getElementById('flexibleGrid');
+            flexibleGrid.innerHTML = ''; // Clear the existing content
+
+            cocktails.forEach(cocktail => {
+                const cocktailItem = document.createElement('div');
+                cocktailItem.classList.add('cocktail-item');
+
+                const cocktailImage = document.createElement('img');
+                cocktailImage.src = cocktail.image; // Replace with your actual image property
+                cocktailImage.alt = cocktail.name; // Replace with your actual name property
+                cocktailImage.classList.add('cocktail-image');
+
+                const cocktailNameBar = document.createElement('div');
+                cocktailNameBar.classList.add('cocktail-name-bar');
+                cocktailNameBar.innerText = cocktail.name; // Replace with your actual name property
+
+                cocktailItem.appendChild(cocktailImage);
+                cocktailItem.appendChild(cocktailNameBar);
+
+                flexibleGrid.appendChild(cocktailItem);
+            });
+        }
+
+        function filterCocktailsByLetter(letter) {
+            // Get selected ingredients
+            const selectedIngredients = Array.from(document.querySelectorAll(".selected-wrapper"))
+                .map(token => token.querySelector(".selected-label").innerText);
+
+            // Filter cocktails that start with the selected letter
+            const filteredCocktails = cocktails.filter(cocktail => cocktail.name.startsWith(letter));
+
+            // Call the function to display filtered cocktails
+            displayCocktails(filteredCocktails, selectedIngredients);
+        }
+
+        function generateAlphabeticalIndex() {
+            const indexContainer = document.createElement('div');
+            indexContainer.classList.add('alphabetical-index');
+
+            const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+
+            letters.forEach((letter, index) => {
+                const link = document.createElement('a');
+                link.href = `#letter-${letter}`;
+                link.textContent = letter;
+                link.innerText = letter;
+                link.addEventListener("click", () => filterCocktailsByLetter(letter));
+                indexContainer.appendChild(link);
+
+                // Add a bullet symbol between letters (except after Z)
+                if (index < letters.length - 1) {
+                    const bullet = document.createElement('span');
+                    bullet.textContent = ' • '; // Bullet symbol
+                    indexContainer.appendChild(bullet);
+                }
+            });
+
+            // Create a container div for the index
+            const indexWrapper = document.createElement('div');
+            indexWrapper.appendChild(indexContainer);
+
+            // Insert the index container before the flexible grid
+            const flexibleGrid = document.getElementById('flexibleGrid');
+            flexibleGrid.parentNode.insertBefore(indexWrapper, flexibleGrid);
+        }
+
     </script>
 </head>
 
@@ -835,6 +936,8 @@
         </select>
     </div>
     </div>
+
+    <div id="alphabeticalIndex" class="alphabetical-index"></div>
 
     <div id="flexibleGrid" class="flexible-grid">
     </div>
