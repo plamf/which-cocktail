@@ -435,10 +435,9 @@
                 .then(response => response.json())
                 .then(data => {
                     cocktails = data;
-                    // Create flexible grid for cocktails
-                    data.forEach(cocktail => {
-                        createCocktailItem(cocktail);
-                    });
+                    // Display cocktails from category A upon initial load
+                    const initialCategory = 'A';
+                    filterCocktailsByLetter(initialCategory);
                 })
                 .catch(error => console.error('Error fetching JSON:', error));
 
@@ -515,15 +514,6 @@
             });
         }
 
-        // Function to display all cocktails
-        function displayAllCocktails() {
-            const flexibleGrid = document.getElementById("flexibleGrid");
-            flexibleGrid.innerHTML = '';
-            cocktails.forEach(cocktail => {
-                createCocktailItem(cocktail);
-            });
-        }
-
         function filterCocktails(selectedIngredients) {
             const flexibleGrid = document.getElementById("flexibleGrid");
 
@@ -532,7 +522,7 @@
 
             // If no ingredients are selected, display all drinks
             if (selectedIngredients.length === 0) {
-                displayAllCocktails();
+                filterCocktailsByLetter('A');
                 return;
             }
 
